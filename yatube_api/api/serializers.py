@@ -7,35 +7,28 @@ class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ('id', 'title', 'slug', 'description')
+        fields = '__all__'
 
 
 class PostSerializer(serializers.ModelSerializer):
-    group = serializers.PrimaryKeyRelatedField(
-        required=False,
-        queryset=Group.objects.all()
-    )
-    author = serializers.StringRelatedField(
+    author = serializers.SlugRelatedField(
         read_only=True,
-        default=serializers.CurrentUserDefault()
-    )
-    image = serializers.ImageField(
-        max_length=None,
-        allow_empty_file=True,
-        required=False
+        default=serializers.CurrentUserDefault(),
+        slug_field='username'
     )
 
     class Meta:
         model = Post
-        fields = ('id', 'text', 'author', 'image', 'pub_date', 'group')
+        fields = '__all__'
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField(
+    author = serializers.SlugRelatedField(
         read_only=True,
-        default=serializers.CurrentUserDefault()
+        default=serializers.CurrentUserDefault(),
+        slug_field='username'
     )
 
     class Meta:
         model = Comment
-        fields = ('id', 'text', 'author', 'created', 'post')
+        fields = '__all__'
